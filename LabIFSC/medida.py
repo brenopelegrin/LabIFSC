@@ -296,7 +296,7 @@ class Medida:
         sep = ""
         err = ""
         uni = ""
-        base = "{nom}±{err} {uni}"
+        base = "({nom}±{err}) {uni}"
         base_exp = "({nom}±{err})×10{expf} {uni}"
 
         if modo == "repr":
@@ -348,15 +348,15 @@ class Medida:
         uni = unidades_em_texto(self.unidades_originais)
         if modo == "latex":
             uni = unidades_em_texto(self.unidades_originais, estilo="latex")
-            base = "{nom}\\pm{err}\\textrm{{ {uni}}}"
-            base_exp = "({nom}\\pm{err})\\cdot10^{{{expn}}}\\textrm{{ {uni}}}"
+            base = "({nom}\\pm{err})\\textrm{{ {uni}}}"
+            base_exp = "({nom}\\pm{err})\\times10^{{{expn}}}\\textrm{{ {uni}}}"
         elif modo == "siunitx":
             uni = unidades_em_texto(self.unidades_originais, estilo="siunitx")
             base = "\\SI{{{nom}+-{err}}}{{{uni}}}"
             base_exp = "\\SI{{{nom}E{expn}+-{err}E{expn}}}{{{uni}}}"
         elif modo == "txt":
             uni = unidades_em_texto(self.unidades_originais, estilo="latex")
-            base = "{nom}+/-{err} {uni}"
+            base = "({nom}+/-{err}) {uni}"
             base_exp = "({nom}+/-{err})*10^{expf} {uni}"
         else:
             expf = gera_expoente(exp)
