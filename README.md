@@ -1,6 +1,10 @@
-[![Build Status](https://travis-ci.org/gjvnq/LabIFSC.svg?branch=master)](https://travis-ci.org/gjvnq/LabIFSC) [![Codecov](https://img.shields.io/codecov/c/github/gjvnq/LabIFSC.svg)](https://codecov.io/gh/gjvnq/LabIFSC) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/LabIFSC.svg)](https://www.python.org) [![GitHub - License](https://img.shields.io/github/license/gjvnq/LabIFSC.svg)](https://github.com/gjvnq/LabIFSC/blob/master/LICENSE) [![PyPI - Version](https://img.shields.io/pypi/v/LabIFSC.svg)](https://pypi.org/project/LabIFSC)
-
 # LabIFSC
+
+### Features diferentes da biblioteca original
+
+- [X] Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
+
+- [ ] Adicionado suporte à criação de tabelas
 
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 

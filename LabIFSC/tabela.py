@@ -3,7 +3,17 @@
 
 import math
 from .matematica import soma, sqrt
+from .medida import Medida
 from copy import copy
+
+def convert_medida_arr_to_nominal(x):
+    x_new = []
+    for i in x:
+        if type(i).__module__ == 'LabIFSC.medida' and type(i).__name__ == 'Medida':
+            x_new.append(i.nominal)
+        else:
+            x_new.append(i)
+    return x_new
 
 def media(x, incerteza="desvio padrão"):
     try:
@@ -53,6 +63,11 @@ def desvio_padrao(x):
     return acumulador
 
 def linearize(x, y, imprimir=False):
+    if type(x[0]).__module__ == 'LabIFSC.medida' and type(x[0]).__name__ == 'Medida':
+        x = convert_medida_arr_to_nominal(x)
+    if type(y[0]).__module__ == 'LabIFSC.medida' and type(y[0]).__name__ == 'Medida':
+        y = convert_medida_arr_to_nominal(y)
+
     if len(x) == 0 or len(y) == 0 or len(x) != len(y):
         raise ValueError("As listas para os valores de 'x' e 'y' tem que ser não nulas ter o mesmo tamanho.")
     x_avg = sum(x)/len(x)
@@ -76,7 +91,7 @@ def linearize(x, y, imprimir=False):
         print("Δa = {}".format(da))
         print("Δb = {}".format(db))
 
-    return {"a": a, "b": b, "Δy": dy, "Δa": da, "Δb": db}
+    return {"a": a, "b": b, "dy": dy, "da": da, "db": db}
 
 # Compara todos os pares (xi, xj) e os retorna em três grupos de acordo com a função de igualdade e desigualdade
 def compare(x):

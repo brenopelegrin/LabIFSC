@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+import sys
 from copy import copy
 from .geral import TODAS_AS_UNIDADES, acha_unidade, calcula_dimensao, analisa_numero, dimensao_em_texto, fator_de_conversao_para_si, unidades_em_texto, converte_unidades, analisa_unidades, simplifica_unidades, gera_expoente, adimensional, get_unidades
 
@@ -13,14 +14,31 @@ else:
     string_types = basestring
 
 def M(*args, **kwargs):
-    if len(args) > 0 and isinstance(args[0], list):
-        ans = []
-        for m in args[0]:
-            if isinstance(m, Medida):
-                ans.append(m)
-            else:
-                ans.append(Medida(m, **kwargs))
-        return ans
+    if len(args) > 0:
+        if isinstance(args[0], list) or type(args[0]).__name__ == 'ndarray':
+            if type(args[0]).__module__ == 'numpy' and type(args[0]).__name__ == 'ndarray':
+                lista = args[0].tolist()
+                try:
+                    modulename = type(args[0]).__module__
+                    numpy_module = sys.modules[modulename]
+                except:
+                    raise ModuleNotFoundError("a biblioteca numpy não foi encontrada, então o suporte à medidas em numpy.ndarray não irá funcionar")
+                ans = []
+                for m in lista:
+                    if isinstance(m, Medida):
+                        ans.append(m)
+                    else:
+                        ans.append(Medida(m, **kwargs))
+                return numpy_module.array(ans)
+            if isinstance(args[0], list):
+                lista = args[0]
+                ans = []
+                for m in lista:
+                    if isinstance(m, Medida):
+                        ans.append(m)
+                    else:
+                        ans.append(Medida(m, **kwargs))
+                return ans
     else:
         return Medida(*args, **kwargs)
 
@@ -33,10 +51,11 @@ class Medida:
     si_incerteza = 0.0
 
     def __init__(self, valor, unidade=None, incerteza=None):
-        if isinstance(valor, list):
+        if isinstance(valor, list) or type(valor).__name__ == 'ndarray':
             raise ValueError("use M([...]) para gerar medidas a partir de listas de números")
 
         if incerteza != None:
+            #raise ValueError("a incerteza não foi informada, então o valor 0.0 foi assumido")
             self.inicializa((valor, incerteza), unidade_txt=unidade)
         else:
             self.inicializa(valor, unidade_txt=unidade)
@@ -348,8 +367,8 @@ class Medida:
         uni = unidades_em_texto(self.unidades_originais)
         if modo == "latex":
             uni = unidades_em_texto(self.unidades_originais, estilo="latex")
-            base = "({nom}\\pm{err})\\textrm{{ {uni}}}"
-            base_exp = "({nom}\\pm{err})\\times10^{{{expn}}}\\textrm{{ {uni}}}"
+            base = "({nom} \\pm {err})\\textrm{{ {uni}}}"
+            base_exp = "({nom} \\pm {err})\\times10^{{{expn}}}\\textrm{{ {uni}}}"
         elif modo == "siunitx":
             uni = unidades_em_texto(self.unidades_originais, estilo="siunitx")
             base = "\\SI{{{nom}+-{err}}}{{{uni}}}"
