@@ -6,6 +6,8 @@
 
 - [ ] Adicionado suporte à criação de tabelas
 
+- [X] A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\text{ m} ou (19,4 \pm 0,03) \times 10^{-3}\text{ m³}.
+
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 
 # Sumário
@@ -24,18 +26,13 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 ## PIP
 
-Em um terminal, basta executar um dos seguintes comandos para instalar ou atualizar a LibIFSC:
+Instale a biblioteca usando o comando:
 
-```pip2 install -U LabIFSC --user --upgrade``` (para quem usa Python 2)
-
-```pip3 install -U LabIFSC --user --upgrade``` (para quem usa Python 3)
-
-```pip install -U LabIFSC --user --upgrade``` (para quem não sabe qual versão do Python está usando)
-
+```pip install git+https://github.com/brenopelegrin/LabIFSC```
 
 ## Manualmente
 
-Caso o PIP não esteja disponível ou não funcione, é possível utilizar a LabIFSC simplesmente colocando a pasta [```LabIFSC```](https://github.com/gjvnq/LabIFSC/archive/master.zip) dentro da pasta em que o seu script está. Exemplo:
+Caso o PIP não esteja disponível ou não funcione, é possível utilizar a LabIFSC simplesmente colocando a pasta [```LabIFSC```](https://github.com/brenopelegrin/LabIFSC/archive/master.zip) dentro da pasta em que o seu script está. Exemplo:
 
 ```
 ─┬ Minha pasta qualquer
@@ -54,9 +51,9 @@ Caso o PIP não esteja disponível ou não funcione, é possível utilizar a Lab
   └─ unidade.py
 ```
 
-[Download da Última Versão (.zip)](https://github.com/gjvnq/LabIFSC/archive/master.zip)
+[Download da Última Versão (.zip)](https://github.com/brenopelegrin/LabIFSC/archive/master.zip)
 
-[Lista de Todas as Versões](https://github.com/gjvnq/LabIFSC/releases)
+[Lista de Todas as Versões](https://github.com/brenopelegrin/LabIFSC/releases)
 
 # Uso
 
@@ -92,6 +89,7 @@ m = M("130(27)", "m")  # Medida(valor(erro), unidade)
 No entanto, ```M()``` também nos permite criar listas de medidas com facilidade:
 
 ```python
+w = M(np.array([1, 40, 22, 11]), incerteza=1, unidade="m")
 x = M([7, 15, 28, 42, 49, 61], incerteza=1, unidade="cm")
 y = M(["1", "2", "3", "4", "4", "6"], incerteza=0.01, unidade="s")
 z = M(["7+-1", "15+/-0.1", "28±10", "42(3)", 49, 61], unidade="kg", incerteza=0.01)
@@ -251,7 +249,7 @@ print("{:txt}".format(m1))      # 1.23+/-0.02 m lb s^-1
 # Diferentes estilos de representação com o arredondamento do ifsc
 print("{}".format(m1))               # 1.23±0.02 m lb s⁻¹
 print("{:-,ifsc}".format(m1))        # 1.23±0.02 m lb s⁻¹
-print("{:latex,ifsc}".format(m1))    # 1.23\\pm0.02\\textrm{ m lb s^-1}
+print("{:latex,ifsc}".format(m1))    # (1.23 \\pm 0.02) \\textrm{ m lb s^-1}
 print("{:siunitex,ifsc}".format(m1)) # 1.23±0.02 m lb s⁻¹
 print("{:txt,ifsc}".format(m1))      # 1.23+/-0.02 m lb s^-1
 
