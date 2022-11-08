@@ -1,14 +1,14 @@
 # LabIFSC
 
+Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
+
 ### Features diferentes da biblioteca original
 
 - [X] Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
 
 - [ ] Adicionado suporte à criação de tabelas
 
-- [X] A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\text{ m} ou (19,4 \pm 0,03) \times 10^{-3}\text{ m³}.
-
-Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
+- [X] A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
 # Sumário
 1. [Instalação](#instalação)
