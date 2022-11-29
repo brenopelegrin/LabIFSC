@@ -109,7 +109,7 @@ def dam(x):
     new_arr = []
     for i in x:
         if type(i).__name__ == 'Medida':
-            new_arr.apend(i.nominal)
+            new_arr.append(i.nominal)
         else:
             new_arr.append(i)
     soma = 0
@@ -123,7 +123,7 @@ def mean(x):
     new_arr = []
     for i in x:
         if type(i).__name__ == 'Medida':
-            new_arr.apend(i.nominal)
+            new_arr.append(i.nominal)
         else:
             new_arr.append(i)
     media = sum(new_arr)/len(new_arr)
