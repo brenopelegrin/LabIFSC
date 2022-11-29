@@ -166,8 +166,8 @@ def registra_unidades():
 
     # Temperature
     Unidade("Kelvin", "K", "K", "K", Medida(1), Medida(0))
-    Unidade("Celsius", "°C", "\\degree{}C", "K", Medida(1), Medida(273.15), simbolo_siunitx="\\celsius")
-    Unidade("Fahrenheit", "°F", "\\degree{}F", "K", Medida(5/9), Medida(255.37222222222223))
+    Unidade("Celsius", "ºC", "$^\\circ$C", "K", Medida(1), Medida(273.15), simbolo_siunitx="\\celsius")
+    Unidade("Fahrenheit", "ºF", "$^\\circ$F", "K", Medida(5/9), Medida(255.37222222222223))
 
     # Quantidade
     Unidade("mol", "mol", "mol", "N", Medida(6.022140857E23), Medida(0.000000074E23))
