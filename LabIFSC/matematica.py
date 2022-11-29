@@ -4,7 +4,7 @@
 import math
 from .medida import Medida
 
-__all__ = ["cos", "sin", "tan", "cot", "sec", "csc", "arc_cos", "arc_sin", "arc_tan", "log", "log10", "log2", "ln", "sqrt", "cbrt"]
+__all__ = ["cos", "sin", "tan", "cot", "sec", "csc", "arc_cos", "arc_sin", "arc_tan", "log", "log10", "log2", "ln", "sqrt", "cbrt", "dam"]
 
 def soma(x):
     try:
@@ -104,3 +104,17 @@ def sqrt(x):
 
 def cbrt(x):
     return x**(1.0/3.0)
+
+def dam(x):
+    new_arr = []
+    for i in x:
+        if type(i).__name__ == 'Medida':
+            new_arr.apend(i.nominal)
+        else:
+            new_arr.append(i)
+    soma = 0
+    media = sum(new_arr)/len(new_arr)
+    for i in new_arr:
+        soma+=abs(i - media)
+    
+    return soma/len(new_arr)

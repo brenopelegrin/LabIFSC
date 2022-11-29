@@ -12,7 +12,7 @@ from .geral import TODAS_AS_UNIDADES, MAPA_DE_DIMENSOES, PREFIXOS_SI_LONGOS, PRE
 from .medida import Medida, M
 from .unidade import Unidade
 from .lista_de_unidades import registra_unidades
-from .matematica import soma, cos, sin, tan, cot, sec, csc, arc_cos, arc_sin, arc_tan, log, log10, log2, ln, sqrt, cbrt
+from .matematica import soma, cos, sin, tan, cot, sec, csc, arc_cos, arc_sin, arc_tan, log, log10, log2, ln, sqrt, cbrt, dam
 from .tabela import media, desvio_padrao, linearize, compare
 
 
