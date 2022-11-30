@@ -10,6 +10,8 @@ from .unidade import Unidade
 def registra_unidades():
     PI = Medida("3.14159(1)")
 
+    #       nome, simbolo, simbolo_latex, dimensao, cte_multiplicativa, cte_aditiva, simbolo_siunitx=None
+
     # Comprimento
     Unidade("Ångstrom", "Å", "Å", "L1", Medida(1E-10), Medida(0))
     Unidade("unidade astronômica", "AU", "AU", "L1", Medida(149597870700), Medida(0))
@@ -133,9 +135,11 @@ def registra_unidades():
 
     # Pressão
     Unidade("Pascal", "Pa", "Pa", "M1L-1T-2", Medida(1), Medida(0))
+    Unidade("milímetros de mercúrio", "mmHg", "mmHg", "M1L-1T-2", Medida(133.322387415), Medida(0))
+    Unidade("centímetros de mercúrio", "cmHg", "cmHg", "M1L-1T-2", Medida(1333.22387415), Medida(0))
 
     # Torque
-    Unidade("Newton metro", "N·m", "N\\cdot{}m", "M1L2T-2", Medida(1), Medida(0))
+    Unidade("Newton metro", "Nm", "N\\cdot{}m", "M1L2T-2", Medida(1), Medida(0))
 
     # Calor e Energia
     Unidade("caloría internacional", "cal", "cal", "M1L2T-2", Medida(4.1868), Medida(0))
