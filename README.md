@@ -3,15 +3,20 @@
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 
 ### Recursos Adicionados
+Este é um fork da versão original da biblioteca LabIFSC disponível em https://github.com/gjvnq/LabIFSC. Como resultado deste fork, algumas funcionalidades novas foram adicionadas à biblioteca.
+Uma dessas funcionalidades é a propagação de incertezas usando simulações de Monte Carlo. A partir das medidas $x$, guardadas na lista "parametros", variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
-Propagação de incertezas usando simulações de monte carlo, são geradas apartir de medidas $x$ (guardardas na lista parametros) uma variavel aleatoria $X$ com distribuição normal $Gauss(\mu=x.nominal,\sigma=x.incerteza)$, essas váriaveis são calculadas $N$ vezes na função definada pelo usuario. É possível ver um histograma tendo instalado a biblioteca **matplotlib** e hist=True.É possível controlar a quantidade de **bins** e requisitar o terceiro momento estátistico da distribuição (ele mede a assimétria da função) por assimetria=True. Por fins de comparação com o método linear de incertezas, é possível ativar comparar=True e caso a função esteja definida na biblioteca original é possível comparar 
+É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins e requisitar o terceiro momento estatístico da distribuição, que mede a assimetria da função, utilizando o parâmetro assimetria=True.
+
+Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
 ```python
     print(montecarlo(funcao=lambda x: np.exp(x[0]),parametros=[Medida((1,0.5),"")],hist=True,comparar=True,assimetria=True,N=1e5,bins=50))
 ```
-#### Vantagens:
-1.
-2.
+<img src="exemplomontecarlo.jpg" width="600" height="600">
 
+#### Vantagens:
+1. É importante destacar que o cálculo de incertezas muitos grandes não funciona com aproximações lineares, o que enfatiza a importância da utilização de simulações de Monte Carlo para essas situações.
+2. O método estatístico adicionado a biblioteca pode ser aplicado em qualquer função cujas variáveis aleatórias X pertençam ao seu domínio, expandindo significativamente as possibilidades de funções que podem ser utilizadas na biblioteca.
 
 
 # Sumário
