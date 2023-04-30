@@ -2,13 +2,17 @@
 
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 
-### Features diferentes da biblioteca original
+### Recursos Adicionados
 
-- [X] Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
+Propagação de incertezas usando simulações de monte carlo, são geradas apartir de medidas $x$ (guardardas na lista parametros) uma variavel aleatoria $X$ com distribuição normal $Gauss(\mu=x.nominal,\sigma=x.incerteza)$, essas váriaveis são calculadas $N$ vezes na função definada pelo usuario. É possível ver um histograma tendo instalado a biblioteca **matplotlib** e hist=True.É possível controlar a quantidade de **bins** e requisitar o terceiro momento estátistico da distribuição (ele mede a assimétria da função) por assimetria=True. Por fins de comparação com o método linear de incertezas, é possível ativar comparar=True e caso a função esteja definida na biblioteca original é possível comparar 
+```python
+    print(montecarlo(funcao=lambda x: np.exp(x[0]),parametros=[Medida((1,0.5),"")],hist=True,comparar=True,assimetria=True,N=1e5,bins=50))
+```
+#### Vantagens:
+1.
+2.
 
-- [ ] Adicionado suporte à criação de tabelas
 
-- [X] A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
 # Sumário
 1. [Instalação](#instalação)
