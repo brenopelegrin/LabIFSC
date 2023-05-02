@@ -2,14 +2,6 @@ from .medida import Medida
 import pkg_resources
 installed= {pkg.key for pkg in pkg_resources.working_set}
 
-def skewness(valores,desviopadrao,media):#usado para medir o quanto uma distribuição é assimétrica (ou quanto ela foge de uma gaussiana)
-  m3=0
-  for j in valores:
-    m3+=(j-media)**3
-  m3=m3/len(valores)
-  g1=m3/(desviopadrao**(1.5))
-  return g1
-
 def montecarlo(funcao=sum,N=1e4,parametros=[Medida((2,0.14),"m"),Medida((4,0.1),"m")],hist=False,bins=100,assimetria="false",comparar=False):
   N=int(N)
   samples=[]
@@ -43,8 +35,15 @@ def montecarlo(funcao=sum,N=1e4,parametros=[Medida((2,0.14),"m"),Medida((4,0.1),
     for j in values:
       desviopadrao+=(media-j)**2
     desviopadrao=(desviopadrao/len(values))**(1/2)
-  skew=skewness(values,desviopadrao,media)
   if assimetria ==True:
+    def skewness(valores,desviopadrao,media):#usado para medir o quanto uma distribuição é assimétrica (ou quanto ela foge de uma gaussiana)
+      m3=0
+      for j in valores:
+        m3+=(j-media)**3
+      m3=m3/len(valores)
+      g1=m3/(desviopadrao**(1.5))
+      return g1
+    skew=skewness(values,desviopadrao,media)
     print(f"O terceiro momento estátistico é {skew}")
   try: #tenta rodar a função recebendo uma medida como parametro
     linear=funcao(parametros)
