@@ -14,7 +14,6 @@ from .unidade import Unidade
 from .lista_de_unidades import registra_unidades
 from .matematica import soma, cos, sin, tan, cot, sec, csc, arc_cos, arc_sin, arc_tan, log, log10, log2, ln, sqrt, cbrt, dam, mean
 from .tabela import media, desvio_padrao, linearize, compare
-from .montecarloerror import montecarlo
 
 __all__ = [
     "TODAS_AS_UNIDADES", "MAPA_DE_DIMENSOES", "PREFIXOS_SI_LONGOS", "PREFIXOS_SI_CURTOS", "PREFIXOS_SI", "analisa_numero", "analisa_unidades", "calcula_dimensao", "parse_dimensions", "acha_unidade", "unidades_em_texto",
