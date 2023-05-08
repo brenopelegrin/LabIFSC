@@ -22,7 +22,7 @@ __all__ = [
     "Unidade",
     "registra_unidades",
     "soma", "cos", "sin", "tan", "cot", "sec", "csc", "arc_cos", "arc_sin", "arc_tan", "log", "log10", "log2", "ln", "sqrt", "cbrt",
-    "media", "desvio_padrao", "linearize", "compare",|"montecarlo"
+    "media", "desvio_padrao", "linearize", "compare","montecarlo"
 ]
 
 def init():
