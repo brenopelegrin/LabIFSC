@@ -10,14 +10,19 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 :ballot_box_with_check: A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
-:ballot_box_with_check: Monte Carlo (explicação mais extensa da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/MonteCarlo_examples.ipynb)
+:ballot_box_with_check: Monte Carlo ,explicação mais extensa da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/MonteCarlo_examples.ipynb)
 
 A partir das medidas $x$, guardadas na lista "parametros", variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
 É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins bins=numero_de_bins. 
 Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
+
+**Exemplo**
+O cálculo de uma exponencial $e^{1\pm0.5}$ é efetuado, importante lembrar que a exponencial **não** é uma função nativa do LabIFSC, e também com uma alta incerteza de 50%. Para esse cálculo, é necessário inserir uma função, a qual pode ser definida como uma expressão lambda x: math.exp(x) ou como uma função definida, por exemplo, def exponencial(x): return math.exp(x). Nesse processo, a visualização do histograma é ativada com o parâmetro hist=True, e será feita uma comparação com a biblioteca original do LabIFSC comparar=True
+
+
 ```python
-    print(montecarlo(lambda x: np.exp(x),Medida((1,0.5),""),hist=True,comparar=True,assimetria=True,N=1e5,bins=50))
+    print(montecarlo(lambda x: math.exp(x),Medida((1,0.5),""),hist=True,comparar=True)
 ```
 <img src="exemplomontecarlo.jpg" width="600" height="600">
 
