@@ -10,9 +10,11 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 :ballot_box_with_check: A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
-:ballot_box_with_check: Monte Carlo ,explicação mais extensa da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/MonteCarlo_examples.ipynb)
+## Monte Carlo 
 
-A partir das medidas $x$, guardadas na lista "parametros", variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
+Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/MonteCarlo_examples.ipynb)
+
+A partir das medidas $x$, que são parametros de uma função, variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
 É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins bins=numero_de_bins. 
 Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
@@ -205,6 +207,8 @@ print(ln(m1))      # 3±0.08
 print(sqrt(m1))    # 4.5±0.2
 print(cbr(m1))     # 2.71±0.0
 ```
+#### Adicionada mais funções
+ Com a função monte carlo é possível calcular a incerteza de virtualmente qualquer função, para saber mais leia [Monte Carlo](#monte-carlo)
 
 ## Unidades
 
