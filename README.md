@@ -19,19 +19,32 @@ A partir das medidas $x$, que são parametros de uma função, variáveis aleat�
 É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins bins=numero_de_bins. 
 Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
 
-**Exemplo**
+A probabilidade que uma certa medida esteja entre $[a,b]$ pode ser calculada passando a lista probabilidade=$[a,b]$ em que $a$ é o menor valor e $b$ o maior do intervalo
+
+
+## **Exemplo**
 O cálculo de uma exponencial $e^{1\pm0.5}$ é efetuado, importante lembrar que a exponencial **não** é uma função nativa do LabIFSC, e também com uma alta incerteza de 50%. Para esse cálculo, é necessário inserir uma função, a qual pode ser definida como uma expressão lambda x: math.exp(x) ou como uma função definida, por exemplo, def exponencial(x): return math.exp(x). Nesse processo, a visualização do histograma é ativada com o parâmetro hist=True, e será feita uma comparação com a biblioteca original do LabIFSC comparar=True
 
 
 ```python
     print(montecarlo(lambda x: math.exp(x),Medida((1,0.5),""),hist=True,comparar=True)
 ```
-<img src="exemplomontecarlo.jpg" width="600" height="600">
+<img src="images/exemplomontecarlo.jpg" width="600" height="600">
 
-#### Vantagens:
+## Probabilidade
+Exemplo da famosa regra 68-95-99.7, uma variavel com distribuição gaussiana com $\mu$=1 e $\sigma=0.1$, a chance que uma medida esteja entre $[\mu -\sigma, \mu +\sigma]$ é de 68%, $[\mu -2\sigma, \mu +2\sigma]$ **95%** como ilustra o código abaixo
+
+```python
+    a=Medida((1,0.1),"")
+    print(montecarlo(lambda x:x,a,probabilidade=[0.8,1.2],hist=True))
+```
+
+<img src="images/probabilidade.jpg" width="600" height="600">
+
+## Vantagens:
 1. É importante destacar que o cálculo de incertezas muitos grandes não funciona com aproximações lineares, o que enfatiza a importância da utilização de simulações de Monte Carlo para essas situações.
 2. O método estatístico adicionado a biblioteca pode ser aplicado em qualquer função cujas variáveis aleatórias X pertençam ao seu domínio, expandindo significativamente as possibilidades de funções que podem ser utilizadas na biblioteca.
-
+3. A probabilidade que uma resultado esteja em um certo intervalo pode ser calculada
 
 # Sumário
 1. [Instalação](#instalação)
@@ -51,7 +64,7 @@ O cálculo de uma exponencial $e^{1\pm0.5}$ é efetuado, importante lembrar que 
 
 Instale a biblioteca usando o comando:
 
-```pip install git+https://github.com/brenopelegrin/LabIFSC```
+```!pip install git+https://github.com/viniciusdutra314/LabIFSC```
 
 ## Manualmente
 
