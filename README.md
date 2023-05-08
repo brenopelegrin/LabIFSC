@@ -2,9 +2,17 @@
 
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 
-### Recursos Adicionados
-Este é um fork da versão original da biblioteca LabIFSC disponível em https://github.com/gjvnq/LabIFSC. Como resultado deste fork, algumas funcionalidades novas foram adicionadas à biblioteca.
-Uma dessas funcionalidades é a propagação de incertezas usando simulações de Monte Carlo. A partir das medidas $x$, guardadas na lista "parametros", variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
+**Features diferentes da biblioteca original**
+ 
+:ballot_box_with_check: Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
+
+:white_square_button: Adicionado suporte à criação de tabelas
+
+:ballot_box_with_check: A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
+
+:ballot_box_with_check: Monte Carlo (explicação mais extensa da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/MonteCarlo_examples.ipynb))
+
+A partir das medidas $x$, guardadas na lista "parametros", variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
 É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins e requisitar o terceiro momento estatístico da distribuição, que mede a assimetria da função, utilizando o parâmetro assimetria=True.
 
