@@ -12,7 +12,7 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 ## Monte Carlo 
 
-Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/MonteCarlo_examples.ipynb)
+Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/monte_carlos_exemplos.ipynb)
 
 A partir das medidas $x$, que são parametros de uma função, variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
@@ -32,7 +32,7 @@ O cálculo de uma exponencial $e^{1\pm0.5}$ é efetuado, importante lembrar que 
 <img src="images/exemplomontecarlo.jpg" width="600" height="600">
 
 ## Probabilidade
-Exemplo da famosa regra 68-95-99.7, uma variavel com distribuição gaussiana com $\mu$=1 e $\sigma=0.1$, a chance que uma medida esteja entre $[\mu -\sigma, \mu +\sigma]$ é de 68%, $[\mu -2\sigma, \mu +2\sigma]$ **95%** como ilustra o código abaixo
+Exemplo da famosa regra 68-95-99.7, uma variável com distribuição gaussiana com $\mu$=1 e $\sigma=0.1$, a chance que uma medida esteja entre $[\mu -\sigma, \mu +\sigma]$ é de 68%, $[\mu -2\sigma, \mu +2\sigma]$ **95%** como ilustra o código abaixo
 
 ```python
     a=Medida((1,0.1),"")
@@ -44,7 +44,7 @@ Exemplo da famosa regra 68-95-99.7, uma variavel com distribuição gaussiana co
 ## Vantagens:
 1. É importante destacar que o cálculo de incertezas muitos grandes não funciona com aproximações lineares, o que enfatiza a importância da utilização de simulações de Monte Carlo para essas situações.
 2. O método estatístico adicionado a biblioteca pode ser aplicado em qualquer função cujas variáveis aleatórias X pertençam ao seu domínio, expandindo significativamente as possibilidades de funções que podem ser utilizadas na biblioteca.
-3. A probabilidade que uma resultado esteja em um certo intervalo pode ser calculada
+3. A probabilidade que um resultado esteja em um certo intervalo pode ser calculada
 
 # Sumário
 1. [Instalação](#instalação)
