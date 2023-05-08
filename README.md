@@ -2,13 +2,36 @@
 
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 
-### Features diferentes da biblioteca original
+**Features diferentes da biblioteca original**
+ 
+:ballot_box_with_check: Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
 
-- [X] Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
+:white_square_button: Adicionado suporte à criação de tabelas
 
-- [ ] Adicionado suporte à criação de tabelas
+:ballot_box_with_check: A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
-- [X] A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
+## Monte Carlo 
+
+Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/MonteCarlo_examples.ipynb)
+
+A partir das medidas $x$, que são parametros de uma função, variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
+
+É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins bins=numero_de_bins. 
+Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
+
+**Exemplo**
+O cálculo de uma exponencial $e^{1\pm0.5}$ é efetuado, importante lembrar que a exponencial **não** é uma função nativa do LabIFSC, e também com uma alta incerteza de 50%. Para esse cálculo, é necessário inserir uma função, a qual pode ser definida como uma expressão lambda x: math.exp(x) ou como uma função definida, por exemplo, def exponencial(x): return math.exp(x). Nesse processo, a visualização do histograma é ativada com o parâmetro hist=True, e será feita uma comparação com a biblioteca original do LabIFSC comparar=True
+
+
+```python
+    print(montecarlo(lambda x: math.exp(x),Medida((1,0.5),""),hist=True,comparar=True)
+```
+<img src="exemplomontecarlo.jpg" width="600" height="600">
+
+#### Vantagens:
+1. É importante destacar que o cálculo de incertezas muitos grandes não funciona com aproximações lineares, o que enfatiza a importância da utilização de simulações de Monte Carlo para essas situações.
+2. O método estatístico adicionado a biblioteca pode ser aplicado em qualquer função cujas variáveis aleatórias X pertençam ao seu domínio, expandindo significativamente as possibilidades de funções que podem ser utilizadas na biblioteca.
+
 
 # Sumário
 1. [Instalação](#instalação)
@@ -184,6 +207,8 @@ print(ln(m1))      # 3±0.08
 print(sqrt(m1))    # 4.5±0.2
 print(cbr(m1))     # 2.71±0.0
 ```
+#### Adicionada mais funções
+ Com a função monte carlo é possível calcular a incerteza de virtualmente qualquer função, para saber mais leia [Monte Carlo](#monte-carlo)
 
 ## Unidades
 
