@@ -14,8 +14,7 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 A partir das medidas $x$, guardadas na lista "parametros", variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
-É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins e requisitar o terceiro momento estatístico da distribuição, que mede a assimetria da função, utilizando o parâmetro assimetria=True.
-
+É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins bins=numero_de_bins. 
 Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
 ```python
     print(montecarlo(lambda x: np.exp(x),Medida((1,0.5),""),hist=True,comparar=True,assimetria=True,N=1e5,bins=50))
