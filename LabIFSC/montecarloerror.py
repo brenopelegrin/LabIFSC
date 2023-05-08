@@ -1,3 +1,4 @@
+from .medida import Medida
 from sys import modules
 instalados=[]
 if "matplotlib.pyplot" in modules: instalados.append("matplot")
