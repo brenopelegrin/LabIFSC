@@ -3,6 +3,7 @@
 
 import pytest
 from math import fabs
+
 from LabIFSC import M, Medida, unidades_em_texto
 
 def test_medida_eq_1():

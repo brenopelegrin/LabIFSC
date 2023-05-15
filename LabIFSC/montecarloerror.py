@@ -81,8 +81,7 @@ def montecarlo(func, *args, comparar=False, N=10_000, hist=False, bins=100, prob
         counter = 0
         for j in valores:
             if a <= j <= b: counter += 1
-        print(
-            f"Usando N={N:,d} a probabilidade estimada do valor estar entre {a} e {b} é de {100 * counter / len(valores)}%")
+        return counter/len(valores)
     # criando histograma
     if hist == True and "matplot" not in instalados:
         raise ValueError("Hist=true porém, você não possue o matplotlib instalado")
