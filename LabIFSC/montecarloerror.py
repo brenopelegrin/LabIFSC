@@ -114,6 +114,7 @@ def montecarlo(func, *args, comparar=False, N=10_000, hist=False, bins=100, prob
             y = [gaussiana(i, media, desviopadrao) for i in x]
         plt.plot(x, y, label="Melhor Gaussiana")
         plt.legend()
+        plt.show()
     try:  # tenta rodar a função recebendo uma medida como parametro
         linear = funcao(*parametros)
     except:
