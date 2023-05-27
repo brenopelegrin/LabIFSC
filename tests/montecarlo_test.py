@@ -27,21 +27,37 @@ def test_funcoesnativas(): #sem numpy
   assert montecarlo(lambda x: log10(m1),m1)==log10(m1)
   assert montecarlo(lambda x: sqrt(m1),m1)==sqrt(m1)
 
-if True:         #def test_funcoesnativas_MCarlo(): #sem numpy 
+def test_funcoesnativas_MCarlo(): #sem numpy 
   m1=Medida((20,1.5),""); m1_c=MCarlo((20,1.5),"")
   assert cos(m1_c)==cos(m1)
   assert sin(m1_c)==sin(m1)
   assert tan(m1_c)==tan(m1)
-  m1=Medida((0.4,0.01),""). m1_c=MCarlo((0.4,0.01),"")
-  #assert arc_cos(m1_c)==arc_cos(m1)
-  #assert arc_sin(m1_c)==arc_sin(m1)
-  #assert arc_tan(m1_c)==arc_tan(m1)
-  m1=Medida((1.2,0.01),""); m1=MCarlo((1.2,0.01),"")
-  print(ln(m1_c),ln(m1))
+  m1=Medida((0.4,0.01),"rad"); m1_c=MCarlo((0.4,0.01),"rad")
+  assert arc_cos(m1_c)==arc_cos(m1)
+  assert arc_sin(m1_c)==arc_sin(m1)
+  assert arc_tan(m1_c)==arc_tan(m1)
+  m1=Medida((1.2,0.01),""); m1_c=MCarlo((1.2,0.01),"")
   assert ln(m1_c)==ln(m1)
   assert log2(m1_c)==log2(m1)
   assert log10(m1_c)==log10(m1)
   assert sqrt(m1_c)==sqrt(m1)
+
+def test_funcoesnativas_numpy_MCarlo(): #com numpy
+  import numpy as np 
+  m1=Medida((20,1.5),""); m1_c=MCarlo((20,1.5),"")
+  assert cos(m1_c)==cos(m1)
+  assert sin(m1_c)==sin(m1)
+  assert tan(m1_c)==tan(m1)
+  m1=Medida((0.4,0.01),"rad"); m1_c=MCarlo((0.4,0.01),"rad")
+  assert arc_cos(m1_c)==arc_cos(m1)
+  assert arc_sin(m1_c)==arc_sin(m1)
+  assert arc_tan(m1_c)==arc_tan(m1)
+  m1=Medida((1.2,0.01),""); m1_c=MCarlo((1.2,0.01),"")
+  assert ln(m1_c)==ln(m1)
+  assert log2(m1_c)==log2(m1)
+  assert log10(m1_c)==log10(m1)
+  assert sqrt(m1_c)==sqrt(m1)
+
 
 def test_wrongvariables():
   a=Medida((7,0.3),"")
@@ -50,13 +66,12 @@ def test_wrongvariables():
               lambda:montecarlo(lambda x:x,3.13),  
               lambda:montecarlo(lambda x:x,"string"),
               lambda:montecarlo(lambda x,y:x+y,[a,b]),
-              lambda: montecarlo(lambda x:x,a,bins=104.3),
               lambda: montecarlo(lambda x:x,a,probabilidade=3),
               lambda: montecarlo(lambda x:x,a,probabilidade=5.1),
               lambda: montecarlo(lambda x:x,a,comparar="True"),
               lambda: montecarlo(lambda x:x,a,comparar="False"),
-              lambda: montecarlo(lambda x:x,a,bins=104.3,hist="True"),
-              lambda: montecarlo(lambda x:x,a,bins=104.3,hist="False")] 
+              lambda: montecarlo(lambda x:x,a,hist="True"),
+              lambda: montecarlo(lambda x:x,a,hist="False")] 
   for j in statements:
     with pytest.raises(ValueError):
         j()

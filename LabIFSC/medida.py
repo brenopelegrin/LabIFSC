@@ -14,7 +14,9 @@ else:
     string_types = basestring
 
 
-def montecarlo(func, *args, comparar=False, N=1_000, hist=False, bins=100, probabilidade=False):
+LabIFSC_Mcarlo_samples=1e4
+
+def montecarlo(func, *args, comparar=False, N=LabIFSC_Mcarlo_samples, hist=False, bins=100, probabilidade=False):
     '''Propagação de erros usando monte carlo
 
   Calcula a densidade de probabilidade do valor de uma função com variaveis gaussianas,

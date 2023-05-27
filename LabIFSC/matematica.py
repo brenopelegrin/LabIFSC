@@ -81,7 +81,6 @@ def arc_cos(x):
         if numpy_import==True:
             calculo=montecarlo(lambda x: np.arccos(x),x)
         else:
-            print(x)
             calculo=montecarlo(lambda x: math.acos(x),x)
         return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
 
@@ -123,7 +122,6 @@ def log(x, b):
         if numpy_import==True:
             calculo=montecarlo(lambda x: np.log(x)/np.log(b),x)
         else:
-            print(log(x,b))
             calculo=montecarlo(lambda x: math.log(x,b),x)
         return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
 def log2(x):
@@ -140,6 +138,7 @@ def sqrt(x):
 
 def cbrt(x):
     return x**(1.0/3.0)
+
 
 def dam(x):
     new_arr = []
