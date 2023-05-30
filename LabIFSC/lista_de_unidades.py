@@ -8,9 +8,13 @@ from .medida import Medida
 from .unidade import Unidade
 
 def registra_unidades():
-    PI = Medida("3.14159(1)")
 
     #       nome, simbolo, simbolo_latex, dimensao, cte_multiplicativa, cte_aditiva, simbolo_siunitx=None
+
+    #Unidades adicionadas pelo fork
+    Unidade("Tesla","T","T","M1T-2I-2",Medida(1),Medida(0))
+
+
 
     # Comprimento
     Unidade("Ångstrom", "Å", "Å", "L1", Medida(1E-10), Medida(0))
