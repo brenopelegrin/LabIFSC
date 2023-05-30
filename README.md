@@ -12,7 +12,7 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 ## Monte Carlo 
 
-Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/monte_carlos_exemplos.ipynb)
+Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/examples/monte_carlo_examples.ipynb)
 
 A partir das medidas $x$, que são parametros de uma função, variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
@@ -47,16 +47,23 @@ Exemplo da famosa regra 68-95-99.7, uma variável com distribuição gaussiana c
 3. A probabilidade que um resultado esteja em um certo intervalo pode ser calculada
 
 # Sumário
-1. [Instalação](#instalação)
-    1. [PIP](#pip)
-    2. [Manualmente](#manualmente)
-2. [Uso](#uso)
-    1. [O Básico](#o-básico)
-    2. [Comparações](#comparações)
-    3. [Propagação de Erro](#propagação-de-erro)
-    4. [Unidades](#unidades)
-    5. [Formatação de Números](#formatação-de-números)
-    6. [Sequências e Tabelas](#sequências-e-tabelas)
+- [LabIFSC](#labifsc)
+  - [Monte Carlo](#monte-carlo)
+  - [**Exemplo**](#exemplo)
+  - [Probabilidade](#probabilidade)
+  - [Vantagens:](#vantagens)
+- [Sumário](#sumário)
+- [Instalação](#instalação)
+  - [PIP](#pip)
+  - [Manualmente](#manualmente)
+- [Uso](#uso)
+  - [O Básico](#o-básico)
+  - [Comparações](#comparações)
+  - [Propagação de Erro](#propagação-de-erro)
+      - [Adicionada mais funções](#adicionada-mais-funções)
+  - [Unidades](#unidades)
+  - [Formatação de Números](#formatação-de-números)
+  - [Sequências e Tabelas](#sequências-e-tabelas)
 
 # Instalação
 
