@@ -12,7 +12,7 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 ## Monte Carlo 
 
-Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/viniciusdutra314/LabIFSC/blob/master/examples/monte_carlo_examples.ipynb)
+Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/brenopelegrin/LabIFSC/blob/master/examples/monte_carlo_examples.ipynb)
 
 A partir das medidas $x$, que são parametros de uma função, variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
 
@@ -20,7 +20,6 @@ A partir das medidas $x$, que são parametros de uma função, variáveis aleat�
 Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
 
 A probabilidade que uma certa medida esteja entre $[a,b]$ pode ser calculada passando a lista probabilidade=$[a,b]$ em que $a$ é o menor valor e $b$ o maior do intervalo
-
 
 ## **Exemplo**
 O cálculo de uma exponencial $e^{1\pm0.5}$ é efetuado, importante lembrar que a exponencial **não** é uma função nativa do LabIFSC, e também com uma alta incerteza de 50%. Para esse cálculo, é necessário inserir uma função, a qual pode ser definida como uma expressão lambda x: math.exp(x) ou como uma função definida, por exemplo, def exponencial(x): return math.exp(x). Nesse processo, a visualização do histograma é ativada com o parâmetro hist=True, e será feita uma comparação com a biblioteca original do LabIFSC comparar=True
@@ -71,7 +70,7 @@ Exemplo da famosa regra 68-95-99.7, uma variável com distribuição gaussiana c
 
 Instale a biblioteca usando o comando:
 
-```!pip install git+https://github.com/viniciusdutra314/LabIFSC```
+```!pip install git+https://github.com/brenopelegrin/LabIFSC```
 
 ## Manualmente
 
