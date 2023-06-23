@@ -6,7 +6,7 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
  
 :ballot_box_with_check: Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
 
-:white_square_button: Adicionado suporte à criação de tabelas
+:ballot_box_with_check: Adicionado suporte à criação de tabelas
 
 :ballot_box_with_check: A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
