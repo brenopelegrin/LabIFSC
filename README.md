@@ -374,7 +374,7 @@ m_4 = lab.arrayM(arrayNominal=np.array([0.44354, 0.12, 1.223]), incertezas=np.ar
 
 # Criando um array de medidas com unidades diferentes utilizando a função arrayM()
 # Nesse caso, a função irá retornar uma lista pois utilizou-se um transformer list
-m_5 = lab.arrayM(arrayNominal=[1.54, 0.123, 5.223], incertezas=0.0037, unidades='C', transformer=np.array)
+m_5 = lab.arrayM(arrayNominal=[1.54, 0.123, 5.223], incertezas=0.0037, unidades='C', transformer=list)
 tab = lab.Tabela(titulo='Meu titulo')
 
 tab.addColuna(m_1, 'Distancias')
