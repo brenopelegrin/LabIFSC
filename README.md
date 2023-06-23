@@ -2,17 +2,55 @@
 
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 
-### Features diferentes da biblioteca original
+**Features diferentes da biblioteca original**
+ 
+:ballot_box_with_check: Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
 
-- [X] Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
+:white_square_button: Adicionado suporte à criação de tabelas
 
-- [ ] Adicionado suporte à criação de tabelas
+:ballot_box_with_check: A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
-- [X] A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
+## Monte Carlo 
+
+Explicação mais extensa e exemplos da função em um [google colab](https://colab.research.google.com/github/brenopelegrin/LabIFSC/blob/master/examples/monte_carlo_examples.ipynb)
+
+A partir das medidas $x$, que são parametros de uma função, variáveis aleatórias $X$ são geradas com distribuição normal Gauss(μ=x.nominal, σ=x.incerteza). Essas variáveis são calculadas $N$ vezes na função definida pelo usuário. 
+
+É possível visualizar um histograma através da instalação da biblioteca [matplotlib](https://github.com/matplotlib/matplotlib) com o parâmetro hist=True. Além disso, é possível controlar a quantidade de bins bins=numero_de_bins. 
+Com o objetivo de comparar com o método linear de incertezas,caso a função esteja definida na biblioteca original, é possível ativar o parâmetro comparar=True. Recomenda-se a instalação da biblioteca [numpy](https://github.com/numpy/numpy) para que os cálculos sejam realizados mais rapidamente, embora não seja obrigatório. 
+
+A probabilidade que uma certa medida esteja entre $[a,b]$ pode ser calculada passando a lista probabilidade=$[a,b]$ em que $a$ é o menor valor e $b$ o maior do intervalo
+
+## **Exemplo**
+O cálculo de uma exponencial $e^{1\pm0.5}$ é efetuado, importante lembrar que a exponencial **não** é uma função nativa do LabIFSC, e também com uma alta incerteza de 50%. Para esse cálculo, é necessário inserir uma função, a qual pode ser definida como uma expressão lambda x: math.exp(x) ou como uma função definida, por exemplo, def exponencial(x): return math.exp(x). Nesse processo, a visualização do histograma é ativada com o parâmetro hist=True, e será feita uma comparação com a biblioteca original do LabIFSC comparar=True
+
+
+```python
+    print(montecarlo(lambda x: math.exp(x),Medida((1,0.5),""),hist=True,comparar=True)
+```
+<img src="images/exemplomontecarlo.jpg" width="600" height="600">
+
+## Probabilidade
+Exemplo da famosa regra 68-95-99.7, uma variável com distribuição gaussiana com $\mu$=1 e $\sigma=0.1$, a chance que uma medida esteja entre $[\mu -\sigma, \mu +\sigma]$ é de 68%, $[\mu -2\sigma, \mu +2\sigma]$ **95%** como ilustra o código abaixo
+
+```python
+    a=Medida((1,0.1),"")
+    print(montecarlo(lambda x:x,a,probabilidade=[0.8,1.2],hist=True))
+```
+
+<img src="images/probabilidade.jpg" width="600" height="600">
+
+## Vantagens:
+1. É importante destacar que o cálculo de incertezas muitos grandes não funciona com aproximações lineares, o que enfatiza a importância da utilização de simulações de Monte Carlo para essas situações.
+2. O método estatístico adicionado a biblioteca pode ser aplicado em qualquer função cujas variáveis aleatórias X pertençam ao seu domínio, expandindo significativamente as possibilidades de funções que podem ser utilizadas na biblioteca.
+3. A probabilidade que um resultado esteja em um certo intervalo pode ser calculada
 
 # Sumário
 - [LabIFSC](#labifsc)
-    - [Features diferentes da biblioteca original](#features-diferentes-da-biblioteca-original)
+  - [Monte Carlo](#monte-carlo)
+  - [**Exemplo**](#exemplo)
+  - [Probabilidade](#probabilidade)
+  - [Vantagens:](#vantagens)
 - [Sumário](#sumário)
 - [Instalação](#instalação)
   - [PIP](#pip)
@@ -21,6 +59,7 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
   - [O Básico](#o-básico)
   - [Comparações](#comparações)
   - [Propagação de Erro](#propagação-de-erro)
+      - [Adicionada mais funções](#adicionada-mais-funções)
   - [Unidades](#unidades)
   - [Formatação de Números](#formatação-de-números)
   - [Sequências e Tabelas](#sequências-e-tabelas)
@@ -32,7 +71,7 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 
 Instale a biblioteca usando o comando:
 
-```pip install git+https://github.com/brenopelegrin/LabIFSC```
+```!pip install git+https://github.com/brenopelegrin/LabIFSC```
 
 ## Manualmente
 
@@ -188,6 +227,8 @@ print(ln(m1))      # 3±0.08
 print(sqrt(m1))    # 4.5±0.2
 print(cbr(m1))     # 2.71±0.0
 ```
+#### Adicionada mais funções
+ Com a função monte carlo é possível calcular a incerteza de virtualmente qualquer função, para saber mais leia [Monte Carlo](#monte-carlo)
 
 ## Unidades
 
@@ -334,7 +375,6 @@ m_4 = lab.arrayM(arrayNominal=np.array([0.44354, 0.12, 1.223]), incertezas=np.ar
 # Criando um array de medidas com unidades diferentes utilizando a função arrayM()
 # Nesse caso, a função irá retornar uma lista pois utilizou-se um transformer list
 m_5 = lab.arrayM(arrayNominal=[1.54, 0.123, 5.223], incertezas=0.0037, unidades='C', transformer=np.array)
-print(m_5)
 tab = lab.Tabela(titulo='Meu titulo')
 
 tab.addColuna(m_1, 'Distancias')
