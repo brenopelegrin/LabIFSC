@@ -11,16 +11,20 @@ Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão d
 - [X] A formatação {:latex,ifsc} é ligeiramente diferente da original. Ao printar uma medida com {:latex,ifsc}, será feito da seguinte maneira: (45,4 \pm 0,01)\textrm{ m} ou (19,4 \pm 0,03)\times10^{-3}\textrm{ m³}.
 
 # Sumário
-1. [Instalação](#instalação)
-    1. [PIP](#pip)
-    2. [Manualmente](#manualmente)
-2. [Uso](#uso)
-    1. [O Básico](#o-básico)
-    2. [Comparações](#comparações)
-    3. [Propagação de Erro](#propagação-de-erro)
-    4. [Unidades](#unidades)
-    5. [Formatação de Números](#formatação-de-números)
-    6. [Sequências e Tabelas](#sequências-e-tabelas)
+- [LabIFSC](#labifsc)
+    - [Features diferentes da biblioteca original](#features-diferentes-da-biblioteca-original)
+- [Sumário](#sumário)
+- [Instalação](#instalação)
+  - [PIP](#pip)
+  - [Manualmente](#manualmente)
+- [Uso](#uso)
+  - [O Básico](#o-básico)
+  - [Comparações](#comparações)
+  - [Propagação de Erro](#propagação-de-erro)
+  - [Unidades](#unidades)
+  - [Formatação de Números](#formatação-de-números)
+  - [Sequências e Tabelas](#sequências-e-tabelas)
+    - [Tabelas e a função arrayM()](#tabelas-e-a-função-arraym)
 
 # Instalação
 
@@ -291,3 +295,116 @@ x[2] = x[2].converta("km")
 linearize(x, y, imprimir=True)
 # Note que, mesmo com unidades diferentes, as linearizações tem o mesmo resultado
 ```
+
+### Tabelas e a função arrayM()
+
+Além da [implementação original](https://github.com/gjvnq/LabIFSC) da biblioteca, foi adicionada uma classe que permite manipular tabelas e obter o resultado em LaTeX e uma função para ajudar a criar tabelas com arrays de medidas.
+
+A classe `Tabela` possui os seguintes métodos:
+
+| Método                       | Descrição                                                                       |
+| ---------------------------- | ------------------------------------------------------------------------------- |
+| addColuna(`array`, `titulo`) | Adiciona uma coluna de medidas a partir de um array e define o título da coluna |
+| delColuna(`index`)           | Deleta a coluna de acordo com o índice                                          |
+| gerarLatex()                 | Retorna uma string contendo o código em LaTeX                                   |
+
+Ao adicionar a primeira coluna, você define o número de elementos máximo de cada coluna da tabela. Todas as próximas colunas precisam ter o mesmo número de linhas.
+
+A biblioteca cuidará da formatação das unidades e incertezas:
+- Se você passar um array com medidas com a mesma incerteza, a incerteza e unidade será colocada no título e removida das linhas
+- Se você passar um array com medidas de incertezas diferentes, elas serão colocadas em cada linha da tabela e apenas a unidade será colocada no título
+- Não é possível criar uma coluna passando um array com medidas com unidades diferentes
+
+Exemplo de como utilizar:
+```python
+import LabIFSC as lab
+import numpy as np
+
+m_1 = lab.M(np.array([1.001, 2.034, 5.394]), incerteza=0.001, unidade='m')
+m_2 = lab.M(np.array([1.201, 6.034, 1.694]), incerteza=0.005, unidade='kg')
+
+# Criando um array de medidas com unidades diferentes utilizando a função M()
+# Nesse caso, como um array numpy foi passado, será retornado um array numpy.
+m_3 = lab.M(np.array([lab.Medida(0.5, incerteza=0.1, unidade="s"), lab.Medida(0.3, incerteza=0.05, unidade="s"), lab.Medida(0.2, incerteza=0.2, unidade="s")]))
+
+# Criando um array de medidas com unidades diferentes utilizando a função arrayM()
+# Nesse caso, a função irá retornar um array numpy pois utilizou-se um transformer np.array
+m_4 = lab.arrayM(arrayNominal=np.array([0.44354, 0.12, 1.223]), incertezas=np.array([0.001, 0.1, 0.05]), unidades='ºC', transformer=np.array)
+
+# Criando um array de medidas com unidades diferentes utilizando a função arrayM()
+# Nesse caso, a função irá retornar uma lista pois utilizou-se um transformer list
+m_5 = lab.arrayM(arrayNominal=[1.54, 0.123, 5.223], incertezas=0.0037, unidades='C', transformer=np.array)
+print(m_5)
+tab = lab.Tabela(titulo='Meu titulo')
+
+tab.addColuna(m_1, 'Distancias')
+tab.addColuna(m_2, 'Massas')
+tab.addColuna(m_3, 'Tempos')
+tab.addColuna(m_4, 'Temperaturas')
+tab.addColuna(m_5, 'Cargas')
+
+tab.delColuna(0)
+
+tabLatex = tab.gerarLatex()
+
+print(tabLatex)
+```
+
+Output:
+
+```latex
+\begin{table}[H]
+\centering
+\caption{Meu titulo}
+\label{yourLabelHere}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Massas (kg) $\pm$ 0,005 (kg)}&\textbf{Tempos (s)}&\textbf{Temperaturas (ºC)}&\textbf{Cargas (C) $\pm$ 0,004 (C)}\\ \hline
+1,201&0,5 \pm 0,1&0,444 \pm 0,001&1,540\\ \hline
+6,034&0,30 \pm 0,05&0,1 \pm 0,1&0,123\\ \hline
+1,694&0,2 \pm 0,2&1,22 \pm 0,05&5,223\\ \hline
+\end{tabular}
+\caption*{Fonte: Autoria própria}
+\end{table}
+```
+
+A função `arrayM()` foi criada para ajudar à criar tabelas facilmente.
+
+- Ela recebe um array dos valores nominais das medidas, um array de incertezas ou uma única incerteza, um array de unidades ou uma única unidade.
+
+- Se ela receber apenas uma unidade ou incerteza, essa unidade ou incerteza será adotada para todo o array de valores nominais.
+
+- No caso de uma unidade para todos os nominais, a unidade precisa ser um `str`. 
+
+- No caso de uma incerteza para todos os nominais, a incerteza precisa ser um `float` ou `str`.
+
+- No caso de arrays de incertezas e unidades, eles precisam ter o mesmo length do array de nominais.
+
+A função funciona da seguinte forma:
+
+```python
+# Cria um array com os valores nominais, suas incertezas e unidades
+# O transformer padrão é o list, então essa chamada irá retornar uma lista
+nominais = [1.0, 2.1, 3.4, 0.2]
+incertezas = [0.3, 0.2, 0.1, 0.1]
+unidades = ['m', 'kg', 'C', 's']
+medidas = lab.arrayM(nominais, incertezas, unidades)
+
+# Cria um array com os valores nominais, suas incertezas e apenas uma unidade para todos
+# Aqui, foi utilizado um transformer np.array, então irá retornar um array numpy
+nominais = [1.0, 2.1, 3.4, 0.2]
+incertezas = np.array([0.3, 0.2, 0.1, 0.1])
+unidades = 'm'
+medidas = lab.arrayM(nominais, incertezas, unidades, transformer=np.array)
+
+# Cria um array com os valores nominais, uma incerteza para todos, e apenas uma unidade para todos
+# Aqui, foi utilizado um transformer list, então irá retornar uma lista
+nominais = np.array([1.0, 2.1, 3.4, 0.2])
+incertezas = 0.1
+unidades = 'm'
+medidas = lab.arrayM(nominais, incertezas, unidades, transformer=list)
+
+# Os inputs nominais, incertezas e unidades podem ser list ou ndarray
+
+```
+

@@ -9,20 +9,20 @@ __email__ = "gabrieljvnq@gmail.com"
 __status__ = "Production"
 
 from .geral import TODAS_AS_UNIDADES, MAPA_DE_DIMENSOES, PREFIXOS_SI_LONGOS, PREFIXOS_SI_CURTOS, PREFIXOS_SI, analisa_numero, analisa_unidades, calcula_dimensao, parse_dimensions, acha_unidade, unidades_em_texto
-from .medida import Medida, M
+from .medida import Medida, M, arrayM
 from .unidade import Unidade
 from .lista_de_unidades import registra_unidades
 from .matematica import soma, cos, sin, tan, cot, sec, csc, arc_cos, arc_sin, arc_tan, log, log10, log2, ln, sqrt, cbrt, dam, mean
-from .tabela import media, desvio_padrao, linearize, compare
+from .tabela import media, desvio_padrao, linearize, compare, Tabela
 
 
 __all__ = [
     "TODAS_AS_UNIDADES", "MAPA_DE_DIMENSOES", "PREFIXOS_SI_LONGOS", "PREFIXOS_SI_CURTOS", "PREFIXOS_SI", "analisa_numero", "analisa_unidades", "calcula_dimensao", "parse_dimensions", "acha_unidade", "unidades_em_texto",
-    "Medida", "M",
+    "Medida", "M", "arrayM",
     "Unidade",
     "registra_unidades",
     "soma", "cos", "sin", "tan", "cot", "sec", "csc", "arc_cos", "arc_sin", "arc_tan", "log", "log10", "log2", "ln", "sqrt", "cbrt",
-    "media", "desvio_padrao", "linearize", "compare"
+    "media", "desvio_padrao", "linearize", "compare", "Tabela"
 ]
 
 def init():

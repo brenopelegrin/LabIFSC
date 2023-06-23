@@ -13,6 +13,39 @@ if PY3:
 else:
     string_types = basestring
 
+def arrayM(arrayNominal, incertezas, unidades, transformer=list):
+
+    newArray = []
+
+    incertezasIsArray = False
+    unidadesIsArray = False
+
+    if isinstance(incertezas, list) or type(incertezas).__name__ == 'ndarray':
+        assert len(incertezas) == len(arrayNominal), "o array incertezas precisa ter o mesmo length do array nominal."
+        incertezasIsArray = True
+
+    if isinstance(unidades, list) or type(unidades).__name__ == 'ndarray':
+        assert len(unidades) == len(arrayNominal), "o array unidades precisa ter o mesmo length do array nominal."
+        unidadesIsArray = True
+    
+    if unidadesIsArray and incertezasIsArray:
+        newArray = [Medida(arrayNominal[i], incerteza=incertezas[i], unidade=unidades[i]) for i in range(len(arrayNominal))]
+
+    elif unidadesIsArray and not incertezasIsArray:
+        assert isinstance(incertezas, str) or isinstance(incertezas, float), "se incertezas não for array, precisa ser str ou float."
+        newArray = [Medida(arrayNominal[i], incerteza=incertezas, unidade=unidades[i]) for i in range(len(arrayNominal))]
+
+    elif incertezasIsArray and not unidadesIsArray:
+        assert isinstance(unidades, str), "se unidades não for array, precisa ser str."
+        newArray = [Medida(arrayNominal[i], incerteza=incertezas[i], unidade=unidades) for i in range(len(arrayNominal))]
+
+    elif not incertezasIsArray and not unidadesIsArray:
+        assert isinstance(unidades, str), "se unidades não for array, precisa ser str."
+        assert isinstance(incertezas, str) or isinstance(incertezas, float), "se incertezas não for array, precisa ser str ou float."
+
+        newArray = [Medida(arrayNominal[i], incerteza=incertezas, unidade=unidades) for i in range(len(arrayNominal))]
+    return transformer(newArray)
+
 def M(*args, **kwargs):
     if len(args) > 0:
         if isinstance(args[0], list) or type(args[0]).__name__ == 'ndarray':
@@ -41,6 +74,7 @@ def M(*args, **kwargs):
                 return ans
     else:
         return Medida(*args, **kwargs)
+
 
 class Medida:
     unidades_originais = [] # Tuplas (objeto unidade, expoente) na ordem em que foram entradas  
@@ -367,6 +401,7 @@ class Medida:
         uni = unidades_em_texto(self.unidades_originais)
         if modo == "latex":
             uni = unidades_em_texto(self.unidades_originais, estilo="latex")
+            #adicionar caso para degree aqui
             base = "({nom} \\pm {err})\\textrm{{ {uni}}}"
             base_exp = "({nom} \\pm {err})\\times10^{{{expn}}}\\textrm{{ {uni}}}"
         elif modo == "siunitx":

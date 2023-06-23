@@ -6,6 +6,92 @@ from .matematica import soma, sqrt
 from .medida import Medida
 from copy import copy
 
+class Tabela:
+    def __init__(self, colunas=[], titulo='Título', fonte="Autoria própria", maximoDeLinhas = None):
+        self._colunas = []
+        self._titulo = titulo
+        self._fonte = fonte
+        self._maximoDeLinhas = None
+        pass
+    
+    def copy(self):
+        newColunas = self._colunas.copy()
+        newTitulo = self._titulo.copy()
+        newFonte = self._fonte.copy()
+        newMaximoDeLinhas = self._maximoDeLinhas.copy()
+        return Tabela(newColunas, newTitulo, newFonte, newMaximoDeLinhas)
+
+    def addColuna(self, arrayDeMedidas, titulo):
+        if(self._maximoDeLinhas):
+            assert len(arrayDeMedidas) == self._maximoDeLinhas, f"A nova coluna precisa ter {self._maximoDeLinhas} linhas."
+
+        lastItem = arrayDeMedidas[0]
+        unidadesDiferentes = False
+        incertezasDiferentes = False
+
+        for index in range(1, len(arrayDeMedidas)):
+            item = arrayDeMedidas[index]
+            if(item.incerteza != lastItem.incerteza):
+                incertezasDiferentes = True
+            elif(item.unidade() != lastItem.unidade()):
+                unidadesDiferentes = True
+        
+        assert unidadesDiferentes == False, "Todos os elementos do array de medidas precisam ter a mesma unidade"
+        self._maximoDeLinhas = len(arrayDeMedidas)
+
+        stringsColuna = []
+        unidadeColuna = f' ({arrayDeMedidas[0].unidade()})'
+        incertezaColuna = ''
+        for item in arrayDeMedidas:
+            currNominal, currIncerteza = '{:-,ifsc}'.format(item).split(' ')[0].replace('(', '').replace(')', '').split('±')
+            if(not incertezasDiferentes):
+                stringsColuna.append(currNominal.replace('.', ','))
+                incertezaColuna = f" $\pm$ {str(currIncerteza).replace('.', ',')}"+unidadeColuna
+            else:
+                stringsColuna.append(currNominal.replace('.', ',') +' \pm '+currIncerteza.replace('.', ','))
+                incertezaColuna = ''
+
+        self._colunas.append({'titulo': titulo+unidadeColuna+incertezaColuna, 'dados': stringsColuna})
+
+    def delColuna(self, index):
+        try:
+            del self._colunas[index]
+        except:
+            raise Exception('Não existe nenhuma coluna com esse índice')
+    
+    def gerarLatex(self):
+        assert len(self._colunas) > 0, "A tabela precisa ter no mínimo uma coluna"
+
+        self._tabular = '|' + '|'.join(['c' for i in self._colunas]) + '|'
+        titles = '&'.join([f"\\textbf\u007b{i['titulo']}\u007d" for i in self._colunas]) + '\\\ \hline\n'
+
+        # revisar essa parte do stringorws
+        stringRows = []
+        cols = [i['dados'] for i in self._colunas]
+
+        for row in range(len(cols[0])):
+            currentRow = []
+            for col in range(len(cols)):
+                currentRow.append(cols[col][row])
+            stringRows.append(currentRow)
+
+        rows = ['&'.join(stringRows[i])+'\\\ \hline\n'  for i in range(len(stringRows))]
+
+        header = "\\begin{table}[H]\n"\
+                    "\centering\n"\
+                    f"\caption\u007b{self._titulo}\u007d\n"\
+                    "\label{yourLabelHere}\n"\
+                    f"\\begin\u007btabular\u007d\u007b{self._tabular}\u007d\n"\
+                    "\hline\n"
+        end =       "\end{tabular}\n"\
+                    f"\caption*\u007b{'Fonte: '+self._fonte}\u007d\n"\
+                "\end{table}\n"
+
+        completo = header + titles+  ''.join(rows)+end
+
+        return(completo)
+
+
 def convert_medida_arr_to_nominal(x):
     x_new = []
     for i in x:
