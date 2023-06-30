@@ -48,7 +48,7 @@ class Tabela:
                 stringsColuna.append(currNominal.replace('.', ','))
                 incertezaColuna = f" $\pm$ {str(currIncerteza).replace('.', ',')}"+unidadeColuna
             else:
-                stringsColuna.append(currNominal.replace('.', ',') +' \pm '+currIncerteza.replace('.', ','))
+                stringsColuna.append('$'+currNominal.replace('.', ',') +' \pm '+currIncerteza.replace('.', ',')+'$')
                 incertezaColuna = ''
 
         self._colunas.append({'titulo': titulo+unidadeColuna+incertezaColuna, 'dados': stringsColuna})
