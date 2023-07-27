@@ -49,7 +49,9 @@ def arrayM(arrayNominal, incertezas, unidades, transformer=list):
         newArray = [Medida(arrayNominal[i], incerteza=incertezas, unidade=unidades) for i in range(len(arrayNominal))]
     return transformer(newArray)
 
-def montecarlo(func, *args, comparar=False, N=LabIFSC_Mcarlo_samples, hist=False, bins=100, probabilidade=False):
+def montecarlo(func : callable, *parametros  ,N : int = 100_000 , 
+               hist : bool=False, bins : int= 100, 
+               probabilidade : list[float] =[0,0]):
     '''Propagação de erros usando monte carlo
 
   Calcula a densidade de probabilidade do valor de uma função com variaveis gaussianas,
@@ -60,8 +62,7 @@ def montecarlo(func, *args, comparar=False, N=LabIFSC_Mcarlo_samples, hist=False
 
   Args:
     func (function) : função para a propagação do erro
-    args (Medidas LabIFSC) : parametros da função definada acima
-    comparar (bool) : ativa ou não a comparação do calculo com uma aproximação linear da biblioteca do LabIFSC
+    parametros list[Medida ou MCarlo] : parametros da função definada acima
     N (int) : quantidade de numeros aleatorios usados
     hist (bool) : ativar ou não a visualização do histograma (necessário matplotlib instalado)
     bins (int) : quantidade de bins usadas no histograma
@@ -69,123 +70,96 @@ def montecarlo(func, *args, comparar=False, N=LabIFSC_Mcarlo_samples, hist=False
 
   Returns:
      MCarlo(media,desviopadrao,unidade)
-  Raises:
-    func e/ou args não existem ValueError("Não foi especificado uma função ou seus parametros")
-    um dos args não é uma medida ValueError("Todos os parametros precisam ser Medida ou MCarlo")
-    N e/ou bins não são inteiros ValueError(""N e bins precisam ser inteiros")
-    comparar e/ou hist não são booleanos ValueError("Comparar e hist precisam ser booleanos")
 '''
-    # verificando se matplot e numpy estam instalados
-    from sys import modules
-    instalados = []
-    if "matplotlib.pyplot" in modules: 
-        instalados.append("matplot")
-    if "numpy" in modules: 
-        instalados.append("numpy")
+    # verificando se matplotlib e numpy estam instalados
+
+    from sys import modules ; instalados = []
+    if "matplotlib" in modules: instalados.append("matplot")
+    if "numpy" in modules: instalados.append("numpy")    
     # importando variaveis e mensagens de erro
-    try:
-        funcao = func; parametros = args
-    except:
-        raise ValueError("Não foi especificada uma função ou seus parametros")
+    if not callable(func): raise TypeError("Func precisa ser um callable")
     for j in parametros:
-        if not isinstance(j, Medida): 
-            try: 
-                Medida((j.nominal,j.incerteza),j.unidade())
-            except:
-                raise ValueError("Todos os parâmetros precisam ser medidas ou MCarlo")
-    try:
-        N=int(N)
-        bins=int(bins)
-    except:
-        raise ValueError("N e bins precisam ser inteiros")
-    if not isinstance(comparar, bool) or not isinstance(hist, bool):
-        raise ValueError("Comparar e hist precisam ser booleanos")
-    if not isinstance(probabilidade, bool) and not isinstance(probabilidade, list):
-        raise ValueError("Probabilidade é uma lista [a,b] em que a é o inicio e b o fim do intervalo")
-    if type(probabilidade) == list:
-        assert len(probabilidade) == 2;
-        "Probabilidade é uma lista [a,b] em que a é o inicio e b o fim do intervalo"
-    # criando numeros aleatorios gaussianos
-    amostras = []
+        if not isinstance(j, Medida) and not isinstance(j,MCarlo): 
+            raise TypeError("Todos os parâmetros (parametros) precisam ser da classe Medida ou MCarlo")
+    
+    if not isinstance(N,int) or not isinstance(bins,int):
+        raise TypeError("N e bins precisam ser int ")
+    
+    if not isinstance(probabilidade,list) or len(probabilidade) != 2:
+        raise TypeError("Probabilidade é uma lista [a,b] em que a é o inicio e b o fim do intervalo")    
+    if hist == True and "matplot" not in instalados: 
+        raise TypeError("Hist=true porém, você não possui o matplotlib instalado ou não importou a biblioteca")
+    
+    # backend em numpy
     if "numpy" in instalados:
-        from numpy.random import normal
-        for j in range(len(parametros)):  # numeros aleatorios com numpy
-            amostras.append((normal(parametros[j].nominal, parametros[j].incerteza, N)))
-    else:
-        from random import gauss
-        for j in range(len(parametros)):  # numeros aleatorios com random
-            amostras.append([gauss(parametros[j].nominal, parametros[j].incerteza) for _ in range(N)])
-    # calculando a função nos numeros aleatorios
-    valores = []
-    for k in range(N):
-        parametros_funcao = [amostras[j][k] for j in range((len(parametros)))]
-        try:
-            valores.append(funcao(*parametros_funcao).nominal)  # caso estejamos usando uma função do LabIFSC
-        except:
-            valores.append(funcao(*parametros_funcao))  # funções não nativas do LabIFSC
-    # media e desvio_padrao
-    if "numpy" in instalados:  # média e desvio-padrão usando numpy
         import numpy as np
-        media = np.average(valores)
-        desviopadrao = np.std(valores)
-    else:  # usando somente python
-        media = sum(valores) / len(valores)
-        desviopadrao = 0
-        for j in valores: desviopadrao += (media - j) ** 2
-        desviopadrao = (desviopadrao / len(valores)) ** (1 / 2)
-    if probabilidade != False:
-        a = probabilidade[0]
-        b = probabilidade[1]
-        counter = 0
-        for j in valores:
-            if a <= j <= b: counter += 1
-        return counter/len(valores)
+        vectorized_func=np.vectorize(func)
+        means=np.array([parametro.nominal for parametro in parametros])
+        stds=np.array([parametro.incerteza for parametro in parametros])
+        y_samples=vectorized_func(*np.transpose(np.random.normal(means,stds,size=(N,len(parametros)))))
+        #funções da propria biblitoca precisar ser analisadas
+        #serão geradas medidas com incerteza = 0, precisamos
+        #somente considerar o valor nominal
+        if isinstance(y_samples[0],MCarlo) or isinstance(y_samples[0],Medida):
+            def medida_to_float(x): return x.nominal
+            y_samples=np.vectorize(medida_to_float)(y_samples)
+        mean=np.mean(y_samples)
+        std=np.std(y_samples)
+        if probabilidade != [0,0]:
+            a = probabilidade[0]
+            b = probabilidade[1]
+            condition=np.logical_and(y_samples>=a,y_samples<=b)
+            chance=np.count_nonzero(condition)/len(y_samples)
+            if hist==False:
+                return chance
+    #backend python-nativo
+    if "numpy" not in instalados:
+        from random import gauss
+        y_samples=[]
+        for j in range(N):
+            inputs=[gauss(parametro[0],parametro[1]) for parametro in parametros]
+            y_samples.append(func(*inputs))
+        mean=sum(y_samples)/len(y_samples)
+        std=(sum((y-mean)**2 for y in y_samples)/len(y_samples))**0.5
+        if probabilidade != [0,0]:
+            a = probabilidade[0]
+            b = probabilidade[1]
+            counter=0
+            for y in y_samples:
+                if a<=y<=b: counter+=1
+            chance=counter/len(y_samples)
+            if hist==False:
+                return chance
     # criando histograma
-    if hist == True and "matplot" not in instalados:
-        raise ValueError("Hist=true porém, você não possui o matplotlib instalado")
+
     if "matplot" in instalados and hist == True:
         import matplotlib.pyplot as plt
-
-        plt.hist(valores, bins, density=True, label="Simulação")
+        plt.hist(y_samples, bins, density=True, label="Simulação")
         plt.xlabel('Valores')
         plt.ylabel('Densidade de probabilidade')
         plt.title(f"Monte Carlo N={N:,d}")
         if "numpy" in instalados:  # plotando melhor gaussiana usando numpy
             def gaussiana_nump(x, mu, sigma):
-                norm = 1. / (sigma * (2. * 3.1415926) ** 0.5)
+                norm = 1. / (sigma * (2. * np.pi) ** 0.5)
                 return norm * np.exp(-(x - mu) ** 2. / (2. * sigma ** 2))
-
-            x = np.linspace(min(valores), max(valores), 1000)
-            y = gaussiana_nump(x, media, desviopadrao)
+            x = np.linspace(min(y_samples), max(y_samples), 1000)
+            y = gaussiana_nump(x, mean,std)
         else:  # #plotando melhor gaussiana usando a bibllioteca math
             from math import exp
             def gaussiana(x, mu, sigma):
                 norm = 1. / (sigma * (2. * 3.1415926) ** 0.5)
                 return norm * exp(-(x - mu) ** 2. / (2. * sigma ** 2))
-
-            print(max(valores), min(valores))
-
             def linspace(comeco, fim, particoes):
                 passos = (fim - comeco) / (particoes - 1)
                 return [comeco + i * passos for i in range(particoes)]
-
-            x = linspace(min(valores), max(valores), N)
-            y = [gaussiana(i, media, desviopadrao) for i in x]
+            x = linspace(min(y_samples), max(y_samples), N)
+            y = [gaussiana(i, mean,std) for i in x]
         plt.plot(x, y, label="Melhor Gaussiana")
         plt.legend()
         plt.show()
-    try:  # tenta rodar a função recebendo uma medida como parametro
-        linear = funcao(*parametros)
-    except:
-        linear = False
-        if comparar == True: print("Função não é nativa do LabIFSC, logo a comparação não é possível")
-    try:
-        unidade = linear.unidade()  # tenta extrar a unidade
-    except:
-        unidade = ""
-    if comparar == True and isinstance(linear, Medida): print(f"Esse é o resultado linear: {linear}")
-    return MCarlo((media, desviopadrao), unidade)
-
+        if probabilidade !=[0,0]:
+            return chance
+    return MCarlo((mean, std), "")
 
 def M(*args, **kwargs):
     if len(args) > 0:

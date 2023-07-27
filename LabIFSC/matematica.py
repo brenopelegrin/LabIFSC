@@ -33,7 +33,7 @@ def cos(x):
         nom  = math.cos(x.nominal)
         err  = math.sin(x.nominal)
         err *= x.incerteza
-        return Medida((nom, err))
+        return Medida((nom, err),"")
     else:
         if numpy_import==True:
             calculo=montecarlo(lambda x: np.cos(x),x)
@@ -76,7 +76,7 @@ def arc_cos(x):
         nom  = math.acos(x.nominal)
         err  = 1/math.sqrt(1 - x.nominal**2)
         err *= x.incerteza
-        return Medida((nom, err), "rad")
+        return Medida((nom, err), "")
     else:
         if numpy_import==True:
             calculo=montecarlo(lambda x: np.arccos(x),x)
@@ -90,7 +90,7 @@ def arc_sin(x):
         nom  = math.asin(x.nominal)
         err  = 1/math.sqrt(1 - x.nominal**2)
         err *= x.incerteza
-        return Medida((nom, err), "rad")
+        return Medida((nom, err), "")
     else:
         if numpy_import==True:
             calculo=montecarlo(lambda x: np.arcsin(x),x)
@@ -103,7 +103,7 @@ def arc_tan(x):
         nom  = math.atan(x.nominal)
         err  = 1/math.sqrt(1 - x.nominal**2)
         err *= x.incerteza
-        return Medida((nom, err), "rad")
+        return Medida((nom, err), "")
     else:
         if numpy_import==True:
             calculo=montecarlo(lambda x: np.arctan(x),x)
