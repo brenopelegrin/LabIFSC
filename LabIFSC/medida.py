@@ -516,3 +516,32 @@ class MCarlo(Medida):
         nom=power.nominal
         err=power.incerteza
         return MCarlo((nom,err))
+    
+
+
+def getIncerteza(x):
+    import numpy as np
+    if isinstance(x,list) or isinstance(x,np.ndarray):
+        arrayIncertezas=np.zeros(len(x))
+        for index, medidas in enumerate(x):
+            if (isinstance(medidas,Medida) or isinstance(medidas,MCarlo)):
+                arrayIncertezas[index]=medidas.incerteza
+            else:
+                raise TypeError("Todos os elementos precisam ser Medidas ou MCarlo")
+        return arrayIncertezas
+    else:
+        raise TypeError("getIncertezas é aplicada em um NumpyArray ou lista com Medidas")
+
+def getNominal(x):
+    import numpy as np
+    if isinstance(x,list) or isinstance(x,np.ndarray):
+        arrayIncertezas=np.zeros(len(x))
+        for index, medidas in enumerate(x):
+            if (isinstance(medidas,Medida) or isinstance(medidas,MCarlo)):
+                arrayIncertezas[index]=medidas.nominal
+            else:
+                raise TypeError("Todos os elementos precisam ser Medidas ou MCarlo")
+        return arrayIncertezas
+    else:
+        raise TypeError("getNominal é aplicada em um NumpyArray ou lista com Medidas")
+

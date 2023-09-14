@@ -17,7 +17,7 @@ def quantidade_numeros_gaussianos(valor):
     num_gaussianos=valor
 
 from .geral import TODAS_AS_UNIDADES, MAPA_DE_DIMENSOES, PREFIXOS_SI_LONGOS, PREFIXOS_SI_CURTOS, PREFIXOS_SI, analisa_numero, analisa_unidades, calcula_dimensao, parse_dimensions, acha_unidade, unidades_em_texto
-from .medida import Medida, M, arrayM, MCarlo, montecarlo
+from .medida import Medida, M, arrayM, MCarlo, montecarlo, getIncerteza, getNominal
 from .unidade import Unidade
 from .lista_de_unidades import registra_unidades ; registra_unidades()
 from .matematica import *; from .matematica import funcoes_matematicas
@@ -27,7 +27,7 @@ from .constantes import *
 
 __all__ = [
     "TODAS_AS_UNIDADES", "MAPA_DE_DIMENSOES", "PREFIXOS_SI_LONGOS", "PREFIXOS_SI_CURTOS", "PREFIXOS_SI", "analisa_numero", "analisa_unidades", "calcula_dimensao", "parse_dimensions", "acha_unidade", "unidades_em_texto",
-    "Medida", "M","MCarlo", "arrayM", "Tabela",
+    "Medida", "M","MCarlo", "arrayM", "Tabela","getIncerteza","getNominal",
     "Unidade",
     "registra_unidades", "media", "desvio_padrao", "linearize", 
     "compare","montecarlo","quantidade_numeros_gaussianos"] + nomes_constantes + funcoes_matematicas
