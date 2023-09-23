@@ -3,16 +3,7 @@
 
 import math
 from .medida import Medida, MCarlo,montecarlo
-
-__all__ = ["cos", "sin", "tan", "arc_cos", "arc_sin", "arc_tan", "log", "log10", "log2", "ln", "sqrt", "cbrt", "dam", "mean"]
-
-
-from sys import modules
-numpy_import=False
-if "numpy" in modules: 
-    import numpy as np
-    numpy_import=True
-
+import numpy as np
 def soma(x):
     try:
         return sum(x)
@@ -21,27 +12,61 @@ def soma(x):
             (sum(list(map(lambda x: x.nominal, x))),
             sum(list(map(lambda x: x.incerteza, x)))), x[0].unidades_originais)
         return m
-
 def torna_medida(x):
     if not isinstance(x, Medida):
         return Medida(x)
     return x
 
-def cos(x):
-    if not isinstance(x,MCarlo):
-        x    = torna_medida(x)
-        nom  = math.cos(x.nominal)
-        err  = math.sin(x.nominal)
-        err *= x.incerteza
-        return Medida((nom, err))
-    else:
-        if numpy_import==True:
-            calculo=montecarlo(lambda x: np.cos(x),x)
+def AceitaMCarlo(func :callable) -> callable:
+    def FuncaoLabificada(*args,**kargs):
+        if isinstance(args[0],MCarlo):
+            return montecarlo(func,*args,**kargs)
         else:
-            calculo=montecarlo(lambda x: math.cos(x),x)
-        return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
+            return func(*args,**kargs)
+    return FuncaoLabificada
 
-def sin(x):
+sinh=AceitaMCarlo(np.sinh)
+cosh=AceitaMCarlo(np.cosh)
+tanh=AceitaMCarlo(np.tanh)
+arcsinh=AceitaMCarlo(np.arcsinh)
+arccosh=AceitaMCarlo(np.arccosh)
+arctanh=AceitaMCarlo(np.arctanh)
+exp=AceitaMCarlo(np.exp)
+exp2=AceitaMCarlo(np.exp2)
+sqrt=AceitaMCarlo(np.sqrt)
+cbrt=AceitaMCarlo(np.cbrt)
+power=AceitaMCarlo(np.power)
+
+    
+
+def cos(x, **kwargs):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
+
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
+    if not isinstance(x, MCarlo):
+        x = torna_medida(x)
+        nom = math.cos(x.nominal)
+        err = math.sin(x.nominal)
+        err *= x.incerteza
+        return Medida((nom, err), "")
+    else:
+        import numpy as np
+        return AceitaMCarlo(np.cos)(x, **kwargs)
+
+def sin(x,**kwargs):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
+
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     if not isinstance(x,MCarlo):
         x    = torna_medida(x)
         nom  = math.sin(x.nominal)
@@ -49,13 +74,18 @@ def sin(x):
         err *= x.incerteza
         return Medida((nom, err))
     else:
-        if numpy_import==True:
-            calculo=montecarlo(lambda x: np.sin(x),x)
-        else:
-            calculo=montecarlo(lambda x: math.sin(x),x)
-        return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
+         import numpy as np
+         return AceitaMCarlo(np.sin)(x,**kwargs)
+    
+def tan(x,**kwargs):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
 
-def tan(x):
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     if not isinstance(x,MCarlo):
         x    = torna_medida(x)
         nom  = math.tan(x.nominal)
@@ -63,55 +93,74 @@ def tan(x):
         err *= x.incerteza
         return Medida((nom, err))
     else:
-        if numpy_import==True:
-            calculo=montecarlo(lambda x: np.tan(x),x)
-        else:
-            calculo=montecarlo(lambda x: math.tan(x),x)
-        return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
+        import numpy as np
+        return AceitaMCarlo(np.tan)(x,**kwargs)
     
+def arc_cos(x,**kwargs):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
 
-def arc_cos(x):
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     if not isinstance(x,MCarlo):
         x    = torna_medida(x)
         nom  = math.acos(x.nominal)
         err  = 1/math.sqrt(1 - x.nominal**2)
         err *= x.incerteza
-        return Medida((nom, err), "rad")
+        return Medida((nom, err), "")
     else:
-        if numpy_import==True:
-            calculo=montecarlo(lambda x: np.arccos(x),x)
-        else:
-            calculo=montecarlo(lambda x: math.acos(x),x)
-        return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
+        import numpy as np
+        return AceitaMCarlo(np.arccos)(x,**kwargs)
+def arc_sin(x,**kwargs):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
 
-def arc_sin(x):
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     if not isinstance(x,MCarlo):
         x    = torna_medida(x)
         nom  = math.asin(x.nominal)
         err  = 1/math.sqrt(1 - x.nominal**2)
         err *= x.incerteza
-        return Medida((nom, err), "rad")
+        return Medida((nom, err), "")
     else:
-        if numpy_import==True:
-            calculo=montecarlo(lambda x: np.arcsin(x),x)
-        else:  
-            calculo=montecarlo(lambda x: math.asin(x),x)
-        return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
-def arc_tan(x):
+        import numpy as np
+        return AceitaMCarlo(np.arcsin)(x,**kwargs)
+    
+def arc_tan(x,**kwargs):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
+
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     if not isinstance(x,MCarlo):
         x    = torna_medida(x)
         nom  = math.atan(x.nominal)
         err  = 1/math.sqrt(1 - x.nominal**2)
         err *= x.incerteza
-        return Medida((nom, err), "rad")
+        return Medida((nom, err), "")
     else:
-        if numpy_import==True:
-            calculo=montecarlo(lambda x: np.arctan(x),x)
-        else:
-            calculo=montecarlo(lambda x: math.atan(x),x)
-        return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
+        import numpy as np
+        return AceitaMCarlo(np.arctan)(x,**kwargs)
     
-def log(x, b):
+def log(x, b=math.e,**kwargs):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
+
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     if not isinstance(x,MCarlo):
         x    = torna_medida(x)
         nom  = math.log(x.nominal, b)
@@ -119,25 +168,44 @@ def log(x, b):
         err *= x.incerteza
         return Medida((nom, err), x.unidades_originais)
     else:
-        if numpy_import==True:
-            calculo=montecarlo(lambda x: np.log(x)/np.log(b),x)
-        else:
-            calculo=montecarlo(lambda x: math.log(x,b),x)
-        return MCarlo((calculo.nominal,calculo.incerteza),x.unidade())
+        import numpy as np
+        log_any_base=lambda x: np.log(x)/np.log(b)
+        return AceitaMCarlo(log_any_base)(x,**kwargs)
 def log2(x):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
+
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     return log(x, 2)
-
 def log10(x):
-    return log(x, 10)
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
 
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
+    return log(x, 10)
 def ln(x):
+    '''Se type(x) == Medida, será usado a propagação de erro do LabIFSC
+    
+    Se type(x) == MCarlo, Monte Carlo será usado   
+
+    Kwargs:
+        Métodos como hist, probabilidade são 
+        
+        acessíveis usando objetos da classe MCarlo'''
     return log(x, math.exp(1))
 
 def sqrt(x):
-    return x**0.5
-
+    return power(x,1/2)
 def cbrt(x):
-    return x**(1.0/3.0)
+    return power(x,1.0/3.0)
 
 
 def dam(x):
@@ -163,3 +231,7 @@ def mean(x):
             new_arr.append(i)
     media = sum(new_arr)/len(new_arr)
     return media
+__all__ = ["soma","torna_medida","cos", "sin", "tan", "arc_cos", "arc_sin", "arc_tan", 
+           "log", "log10", "log2" ,"ln","sqrt", "cbrt", "dam", "mean",
+           "sinh","cosh","tanh","arcsinh","arccosh","arctanh","exp","exp2","AceitaMCarlo"]
+funcoes_matematicas=__all__
