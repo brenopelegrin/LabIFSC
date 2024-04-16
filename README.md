@@ -2,6 +2,14 @@
 
 Uma biblioteca para Python 2 e Python 3 para propagação de erro e conversão de unidades utilizando os métodos (um tanto insólitos) que os professores de lab de física do IFSC-USP insistem.
 
+## Notas sobre o fork
+
+**Desenvolvimento**
+
+Atualmente essa biblioteca não está mais em desenvolvimento pelos mantenedores do fork, [brenopelegrin](https://github.com/brenopelegrin/) e [viniciusdutra314](https://github.com/viniciusdutra314/). Se você quiser uma versão mais atualizada, dê uma olhada no projeto [LabIFSC2](https://github.com/viniciusdutra314/LabIFSC2) de [viniciusdutra314](https://github.com/viniciusdutra314/).
+
+Todavia, se você tiver alguma dúvida ou quiser reportar um problema, sinta-se livre para abrir uma issue. Ela será respondida assim que possível.
+
 **Features diferentes da biblioteca original**
  
 :ballot_box_with_check: Adicionado suporte à arrays do numpy (numpy.ndarray) na função M(). Agora, quando é passado um numpy.ndarray para M(), ela retornará um numpy.ndarray tendo objetos LabIFSC.Medida.medida como seus elementos. As operações entre arrays do numpy que multiplicam elemento-elemento estão funcionando, pois as operações elemento-elemento são definidas na classe Medida.
